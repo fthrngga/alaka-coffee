@@ -6,6 +6,7 @@ export default function AdminLayout({ children }) {
     const currentRoute = route().current();
     const flash = usePage().props.flash;
     const [showFlash, setShowFlash] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         if (flash.success || flash.error) {
@@ -36,12 +37,25 @@ export default function AdminLayout({ children }) {
                 </div>
             )}
 
+            {/* Mobile Sidebar Overlay */}
+            {isMobileMenuOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                ></div>
+            )}
+
             {/* Sidebar */}
-            <aside className="w-64 bg-base border-r border-[#EAE3DB] flex flex-col hidden md:flex">
-                <div className="p-6">
+            <aside className={`fixed md:static inset-y-0 left-0 w-64 bg-base border-r border-[#EAE3DB] flex flex-col z-50 transform transition-transform duration-300 md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                <div className="p-6 flex justify-between items-center">
                     <Link href="/">
                         <h1 className="font-serif text-2xl text-primary-base font-bold tracking-tight">Alaka Admin</h1>
                     </Link>
+                    <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-text-muted hover:text-text-main">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
                 
                 <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
@@ -49,6 +63,7 @@ export default function AdminLayout({ children }) {
                         <Link
                             key={item.name}
                             href={item.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
                             className={`flex items-center px-4 py-3 text-sm rounded-xl transition-colors ${
                                 item.active 
                                     ? 'bg-primary-light/15 text-primary-base font-bold' 
@@ -81,8 +96,18 @@ export default function AdminLayout({ children }) {
             {/* Main Content */}
             <main className="flex-1 flex flex-col min-w-0 bg-[#FAF8F5]">
                 {/* Topbar */}
-                <header className="h-16 border-b border-[#EAE3DB] bg-surface flex items-center justify-between px-8">
-                    <h2 className="text-xl font-serif text-text-main font-semibold">Admin Panel</h2>
+                <header className="h-16 border-b border-[#EAE3DB] bg-surface flex items-center justify-between px-6 md:px-8">
+                    <div className="flex items-center gap-4">
+                        <button 
+                            onClick={() => setIsMobileMenuOpen(true)}
+                            className="md:hidden p-2 -ml-2 text-text-muted hover:text-text-main rounded-lg hover:bg-[#FAF8F5] transition-colors"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                            </svg>
+                        </button>
+                        <h2 className="text-xl font-serif text-text-main font-semibold">Admin Panel</h2>
+                    </div>
                     <div className="flex items-center gap-4">
                         <span className="text-sm font-medium text-text-main">{user.name}</span>
                         <Link
