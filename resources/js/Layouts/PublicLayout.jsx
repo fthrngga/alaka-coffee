@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
+import Dropdown from '@/Components/Dropdown';
 
 export default function PublicLayout({ children }) {
     const { auth } = usePage().props;
@@ -54,12 +55,35 @@ export default function PublicLayout({ children }) {
                                     </svg>
                                     <span className="absolute top-1 right-1 w-2 h-2 bg-accent-promo rounded-full"></span>
                                 </Link>
-                                <Link 
-                                    href={user.role === 'admin' ? route('admin.dashboard') : route('dashboard.user')}
-                                    className="px-5 py-2.5 bg-primary-base text-white text-sm font-semibold rounded-full hover:bg-primary-dark transition-colors"
-                                >
-                                    My Profile
-                                </Link>
+                                <div className="relative">
+                                    <Dropdown>
+                                        <Dropdown.Trigger>
+                                            <span className="inline-flex rounded-md">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-full text-white bg-primary-base hover:bg-primary-dark transition ease-in-out duration-150"
+                                                >
+                                                    Hi, {user.name.split(' ')[0]}
+                                                    <svg className="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </span>
+                                        </Dropdown.Trigger>
+
+                                        <Dropdown.Content align="right" width="48">
+                                            {user.role === 'admin' ? (
+                                                <Dropdown.Link href={route('admin.dashboard')}>Admin Dashboard</Dropdown.Link>
+                                            ) : (
+                                                <Dropdown.Link href={route('user.orders.index')}>Riwayat Pesanan</Dropdown.Link>
+                                            )}
+                                            <Dropdown.Link href={route('profile.edit')}>Profil</Dropdown.Link>
+                                            <Dropdown.Link href={route('logout')} method="post" as="button">
+                                                Log Out
+                                            </Dropdown.Link>
+                                        </Dropdown.Content>
+                                    </Dropdown>
+                                </div>
                             </>
                         ) : (
                             <>
@@ -99,11 +123,23 @@ export default function PublicLayout({ children }) {
                         <div className="pt-2 flex flex-col gap-3">
                             {user ? (
                                 <>
-                                    <Link href={user.role === 'admin' ? route('admin.dashboard') : route('dashboard.user')} className="text-base font-medium text-primary-base py-2">
-                                        My Profile
+                                    {user.role === 'admin' ? (
+                                        <Link href={route('admin.dashboard')} className="text-base font-medium text-primary-base py-2">
+                                            Admin Dashboard
+                                        </Link>
+                                    ) : (
+                                        <Link href={route('user.orders.index')} className="text-base font-medium text-primary-base py-2">
+                                            Riwayat Pesanan
+                                        </Link>
+                                    )}
+                                    <Link href={route('profile.edit')} className="text-base font-medium text-text-main py-2">
+                                        Profil
                                     </Link>
                                     <Link href={route('cart.index')} className="text-base font-medium text-text-main py-2">
                                         Cart
+                                    </Link>
+                                    <Link href={route('logout')} method="post" as="button" className="text-base font-medium text-left text-text-main py-2">
+                                        Log Out
                                     </Link>
                                 </>
                             ) : (

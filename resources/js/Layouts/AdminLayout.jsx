@@ -20,9 +20,9 @@ export default function AdminLayout({ children }) {
         { name: 'Manage Kategori', href: route('admin.kategori.index'), active: currentRoute?.startsWith('admin.kategori') },
         { name: 'Manage Products', href: route('admin.menu.index'), active: currentRoute?.startsWith('admin.menu') },
         { name: 'Manage Promo', href: route('admin.promo.index'), active: currentRoute?.startsWith('admin.promo') },
-        { name: 'Manage Orders', href: '#', active: false },
+        { name: 'Manage Orders', href: route('admin.orders.index'), active: currentRoute?.startsWith('admin.orders') },
         { name: 'Manage FAQ', href: route('admin.faq.index'), active: currentRoute?.startsWith('admin.faq') },
-        { name: 'Manage Users', href: '#', active: false },
+        { name: 'Manage Users', href: route('admin.users.index'), active: currentRoute?.startsWith('admin.users') },
     ];
 
     return (

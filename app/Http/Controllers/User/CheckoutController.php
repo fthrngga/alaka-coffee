@@ -132,7 +132,7 @@ class CheckoutController extends Controller
 
             DB::commit();
 
-            return redirect()->route('dashboard.user')->with('success', 'Pesanan berhasil dibuat. Menunggu konfirmasi pembayaran.');
+            return redirect()->route('user.orders.index')->with('success', 'Pesanan berhasil dibuat. Menunggu konfirmasi pembayaran.');
 
         } catch (\Exception $e) {
             DB::rollBack();
