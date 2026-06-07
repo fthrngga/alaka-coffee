@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\CheckoutController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,13 +39,17 @@ Route::middleware(['auth', 'role:pembeli'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard.user');
 
-    Route::get('/keranjang', function () {
-        return Inertia::render('User/Keranjang');
-    })->name('keranjang.index');
+    // Keranjang
+    Route::get('/keranjang', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/keranjang/add', [CartController::class, 'add'])->name('cart.add');
+    Route::put('/keranjang/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/keranjang/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::post('/keranjang/promo', [CartController::class, 'applyPromo'])->name('cart.promo.apply');
+    Route::delete('/keranjang/promo', [CartController::class, 'removePromo'])->name('cart.promo.remove');
 
-    Route::get('/checkout', function () {
-        return Inertia::render('User/Checkout');
-    })->name('checkout.index');
+    // Checkout
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 });
 
 Route::middleware('auth')->group(function () {

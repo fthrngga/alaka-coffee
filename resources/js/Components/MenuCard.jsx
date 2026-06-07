@@ -1,7 +1,19 @@
-import { Link } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { formatRupiah } from '@/utils/formatters';
 
 export default function MenuCard({ item }) {
+    const { auth } = usePage().props;
+
+    const handleAddToCart = () => {
+        if (!auth.user) {
+            router.get(route('login'));
+            return;
+        }
+
+        router.post(route('cart.add'), { id_menu: item.id, qty: 1 }, {
+            preserveScroll: true,
+        });
+    };
     return (
         <div className="bg-surface rounded-2xl border border-[#EAE3DB] overflow-hidden group hover:shadow-[0_10px_20px_rgba(92,61,46,0.08)] transition-all duration-300 flex flex-col h-full">
             <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
@@ -26,8 +38,8 @@ export default function MenuCard({ item }) {
                         {formatRupiah(item.harga)}
                     </span>
                     <button 
-                        onClick={() => alert('Fitur Keranjang dalam pengembangan')}
-                        className="w-10 h-10 rounded-full bg-primary-base text-white flex items-center justify-center hover:bg-primary-dark transition-colors"
+                        onClick={handleAddToCart}
+                        className="w-10 h-10 rounded-full bg-primary-base text-white flex items-center justify-center hover:bg-primary-dark transition-colors shadow-sm"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
