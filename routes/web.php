@@ -6,18 +6,15 @@ use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PromoController;
+use App\Http\Controllers\PublicController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [PublicController::class, 'index'])->name('home');
+Route::get('/menu', [PublicController::class, 'menu'])->name('menu');
+Route::get('/about', [PublicController::class, 'about'])->name('about');
+Route::get('/faq', [PublicController::class, 'faq'])->name('faq');
 
 Route::get('/dashboard', function () {
     if (auth()->user()->role === 'admin') {
