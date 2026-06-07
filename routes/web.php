@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\PromoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,6 +31,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     
     Route::resource('kategori', KategoriController::class)->except(['create', 'show', 'edit']);
     Route::resource('faq', FaqController::class)->except(['create', 'show', 'edit']);
+    Route::resource('menu', MenuController::class)->except(['create', 'show', 'edit']);
+    Route::resource('promo', PromoController::class)->except(['create', 'show', 'edit']);
 });
 
 Route::middleware(['auth', 'role:pembeli'])->group(function () {
